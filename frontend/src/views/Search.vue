@@ -176,6 +176,11 @@ export default {
         flex: 0 0 auto;
         width: 66.66%;
         padding-right: 1rem;
+
+         @media (max-width: 991.98px) {
+          width: 100%;
+        }
+
         & > .wrapperDate {
           display: flex;
 
@@ -206,6 +211,10 @@ export default {
         flex: 0 0 auto;
         width: 33.33%;
         border-radius: 24px;
+
+        @media (max-width: 991.98px) {
+          width: 100%;
+        }
       }
     }
   }
