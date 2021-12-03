@@ -1,4 +1,4 @@
-<!-- # ![Header](header.png) -->
+# ![Header](header.png)
 
 ## Команда
 - [Дмитрий Пузырев](https://t.me/dipuzyrev) - бэкенд
