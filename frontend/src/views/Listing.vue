@@ -148,6 +148,7 @@
 import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { onMounted } from '@vue/runtime-core'
 
 export default {
   setup () {
@@ -172,6 +173,10 @@ export default {
         }
       ).catch(e => alert(e))
     }
+
+    onMounted(() => {
+      getInfo()
+    })
 
     return {
       project
