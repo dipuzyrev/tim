@@ -8,48 +8,51 @@
       </div>
 
       <div class="tags">
-        <DropDown title="Технологическое направление">
-          <div class="item">
-            <input type="checkbox" name="cityTansport" id="cityTansport" style="width: 37px">
-            <label for="cityTansport">Доступный и комфортный городской транспорт</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="newTypes" id="newTypes">
-            <label for="newTypes">Новые виды мобильности</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="safetyRoad" id="safetyRoad">
-            <label for="safetyRoad">Безопасность дорожного движения</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="healthyStreets" id="healthyStreets">
-            <label for="healthyStreets">Здоровые улицы и экология</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="digitalTech" id="digitalTech" style="width: 28px">
-            <label for="digitalTech">Цифровые технологии в&nbsp;транспорте</label>
-          </div>
+        <div class="tags">
+          <DropDown title="Технологическое направление">
+            <div class="item">
+              <input type="checkbox" name="cityTansport" id="cityTansport" v-model="cityTansport" style="width: 37px">
+              <label for="cityTansport">Доступный и комфортный городской транспорт</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="newTypes" v-model="newTypes" id="newTypes">
+              <label for="newTypes">Новые виды мобильности</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="safetyRoad" v-model="safetyRoad" id="safetyRoad">
+              <label for="safetyRoad">Безопасность дорожного движения</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="healthyStreets" v-model="healthyStreets" id="healthyStreets">
+              <label for="healthyStreets">Здоровые улицы и экология</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="digitalTech" id="digitalTech" v-model="digitalTech" style="width: 28px">
+              <label for="digitalTech">Цифровые технологии в&nbsp;транспорте</label>
+            </div>
 
-        </DropDown>
-        <DropDown title="Технологическое направление">
-          <div class="item">
-            <input type="checkbox" name="Idea" id="Idea">
-            <label for="Idea">Идея</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="Accelerator" id="Accelerator">
-            <label for="Accelerator">Аккселератор</label>
-          </div>
-          <div class="item">
-            <input type="checkbox" name="Pilot" id="Pilot">
-            <label for="Pilot">Пилот</label>
-          </div>
+          </DropDown>
+          <DropDown title="Стадия проекта">
+            <div class="item">
+              <input type="checkbox" name="Idea" v-model="idea" id="idea">
+              <label for="idea">Идея</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="Accelerator" v-model="accelerator" id="accelerator">
+              <label for="accelerator">Аккселератор</label>
+            </div>
+            <div class="item">
+              <input type="checkbox" name="Pilot" v-model="pilot" id="pilot">
+              <label for="pilot">Пилот</label>
+            </div>
 
-        </DropDown>
+          </DropDown>
+        </div>
+        <span>Найдено {{ searchedProducts.length }} продуктов</span>
       </div>
 
     </div>
-    <div class="surface project" v-for="(proj, index) in projects" :key="index">
+    <div class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
       <div class="wrapper">
         <div class="wrapperDate">
           <div class="date">{{proj.date}}</div>
@@ -73,6 +76,7 @@ import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 
 import DropDown from '@/components/DropDown.vue'
+import { computed } from '@vue/runtime-core'
 export default {
   components: {
     DropDown
@@ -83,32 +87,98 @@ export default {
 
     const textToSearch = ref(route.query.q)
 
+    const cityTansport = ref(false)
+    const newTypes = ref(false)
+    const safetyRoad = ref(false)
+    const healthyStreets = ref(false)
+    const digitalTech = ref(false)
+
+    const idea = ref(false)
+    const accelerator = ref(false)
+    const pilot = ref(true)
+
     const projects = ref([
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',
         description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
         date: '01.01.2021',
-        step: 'Пилот'
+        step: 'Пилот',
+        pilot: true,
+        cityTansport: true
       },
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',
         description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
-        date: '01.01.2021',
+        date: '02.01.2021',
         step: 'Пилот',
-        thumbnail: '1.png'
+        thumbnail: '1.png',
+        accelerator: true,
+        newTypes: true
       },
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',
         description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
-        date: '01.01.2021',
+        date: '03.01.2021',
         step: 'Пилот',
-        thumbnail: '1.png'
+        thumbnail: '1.png',
+        idea: true,
+        safetyRoad: true
       }
     ])
 
+    const filteredProjects = computed(() => {
+      return projects.value.filter((item) => {
+        return (
+          item.cityTansport === cityTansport.value ||
+          item.newTypes === newTypes.value ||
+          item.safetyRoad === safetyRoad.value ||
+          item.healthyStreets === healthyStreets.value ||
+          item.digitalTech === digitalTech.value ||
+          item.idea === idea.value ||
+          item.accelerator === accelerator.value ||
+          item.pilot === pilot.value
+        )
+      })
+    })
+
+    // watchEffect(() => {
+    //   filteredProjects.value = projects.value.filter((item) => {
+    //     return (
+    //       !!item.cityTansport === cityTansport.value ||
+    //       !!item.newTypes === newTypes.value ||
+    //       !!item.safetyRoad === safetyRoad.value ||
+    //       !!item.healthyStreets === healthyStreets.value ||
+    //       !!item.digitalTech === digitalTech.value ||
+    //       !!item.idea === idea.value ||
+    //       !!item.accelerator === accelerator.value ||
+    //       !!item.pilot === pilot.value
+    //     )
+    //   })
+    // })
+
+    const searchedProducts = computed(() => {
+      return filteredProjects.value.filter((projects) => {
+        return (
+          projects.title
+            .toLowerCase()
+            .indexOf(textToSearch.value.toLowerCase()) !== -1
+        )
+      }).sort((a, b) => {
+        return new Date(b.date) - new Date(a.date)
+      })
+    })
+
     return {
       textToSearch,
-      projects
+      cityTansport,
+      newTypes,
+      safetyRoad,
+      healthyStreets,
+      digitalTech,
+      idea,
+      accelerator,
+      pilot,
+      searchedProducts
     }
   }
 }
@@ -148,6 +218,8 @@ export default {
 
     .tags {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 1rem;
 
       .item {
@@ -164,6 +236,11 @@ export default {
           width: 24px;
         }
       }
+
+      span {
+        font-size: 1.375rem;
+        color: #00000040;
+      }
     }
 
     &.project {
@@ -175,7 +252,7 @@ export default {
       & > .wrapper {
         flex: 0 0 auto;
         width: 66.66%;
-        padding-right: 1rem;
+        padding-right: 5rem;
 
          @media (max-width: 991.98px) {
           width: 100%;
