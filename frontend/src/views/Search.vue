@@ -8,7 +8,7 @@
       </div>
 
       <div class="tags">
-        <div class="tags">
+        <!-- <div class="tags">
           <DropDown title="Технологическое направление">
             <div class="item">
               <input type="checkbox" name="cityTansport" id="cityTansport" v-model="cityTansport" style="width: 37px">
@@ -47,12 +47,65 @@
             </div>
 
           </DropDown>
-        </div>
+        </div> -->
         <span>Найдено {{ searchedProducts.length }} продуктов</span>
       </div>
 
     </div>
-    <template v-if="searchedProducts.length">
+    <div class="wrapperContent">
+      <div class="filters surface">
+        <div class="tags">
+          <h2>Теги</h2>
+          <div class="wrapperTags">
+            <div class="bubble" @click="identity = !identity" :class="{active: identity}">Идентификация</div>
+            <div class="bubble" @click="payment = !payment" :class="{active: payment}">Оплата</div>
+            <div class="bubble" @click="eco = !eco" :class="{active: eco}">Экология</div>
+            <div class="bubble" @click="safety = !safety" :class="{active: safety}">Безопасность</div>
+            <div class="bubble" @click="geo = !geo" :class="{active: geo}">Геолокация</div>
+            <div class="bubble">...</div>
+          </div>
+        </div>
+
+        <div class="priorityOrganizations">
+          <h2>Приоритетные организации</h2>
+          <div class="wrapperOrganizations">
+            <div class="bubble" @click="MosMetro = !MosMetro" :class="{active: MosMetro}">Московский метрополитен</div>
+            <div class="bubble" @click="MosGorTrans = !MosGorTrans" :class="{active: MosGorTrans}">Мосгортранс</div>
+            <div class="bubble" @click="CODD = !CODD" :class="{active: CODD}">ЦОДД</div>
+            <div class="bubble" @click="AMPP = !AMPP" :class="{active: AMPP}">АМПП</div>
+            <div class="bubble" @click="OrgPer = !OrgPer" :class="{active: OrgPer}">Организатор перевозок</div>
+            <div class="bubble" @click="MosTransPorj = !MosTransPorj" :class="{active: MosTransPorj}">Мостранспроект</div>
+          </div>
+        </div>
+
+        <div class="pilot">
+          <h2>Пилот</h2>
+          <div class="wrapperPilot">
+            <div>
+              <input type="radio" name="pilot" id="notMatter" value="notMatter" v-model="pilot">
+              <label for="notMatter">Не важно</label>
+            </div>
+            <div>
+              <input type="radio" name="pilot" id="no" value="no" v-model="pilot">
+              <label for="no">Нет</label>
+            </div>
+            <div>
+              <input type="radio" name="pilot" id="wip" value="wip" v-model="pilot">
+              <label for="wip">В прогрессе</label>
+            </div>
+            <div>
+              <input type="radio" name="pilot" id="passed" value="passed" v-model="pilot">
+              <label for="passed">Прошло</label>
+            </div>
+            <div v-if="pilot === 'passed'">
+              <input type="checkbox" name="pilot" id="success" v-model="successful">
+              <label for="success">Удачно</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cases">
+        <template v-if="searchedProducts.length">
       <div class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
         <div class="wrapper">
           <div class="wrapperDate">
@@ -66,8 +119,6 @@
 
           <p>{{proj.description}}</p>
         </div>
-        <img v-if="proj.thumbnail" :src="require(`@/assets/${proj.thumbnail}`)" :alt="proj.title">
-        <img v-else :src="require(`@/assets/notFound.svg`)">
       </div>
     </template>
     <template v-else>
@@ -81,9 +132,12 @@
 
           <p>По вашему запросу ничего не найдено. <router-link class="lnk" to="/suggest">Предложите идею</router-link> или <a href="https://t.me/SeamMiner" class="lnk">свяжитесь с нами.</a></p>
         </div>
-        <img :src="require(`@/assets/notFound.svg`)">
+        <!-- <img :src="require(`@/assets/notFound.svg`)"> -->
       </div>
     </template>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -91,27 +145,29 @@
 import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 
-import DropDown from '@/components/DropDown.vue'
 import { computed } from '@vue/runtime-core'
 export default {
-  components: {
-    DropDown
-  },
 
   setup () {
     const route = useRoute()
 
     const textToSearch = ref(route.query.q || '')
 
-    const cityTansport = ref(false)
-    const newTypes = ref(false)
-    const safetyRoad = ref(false)
-    const healthyStreets = ref(false)
-    const digitalTech = ref(false)
+    const MosMetro = ref(false)
+    const MosGorTrans = ref(false)
+    const CODD = ref(false)
+    const AMPP = ref(false)
+    const OrgPer = ref(false)
+    const MosTransPorj = ref(false)
 
-    const idea = ref(false)
-    const accelerator = ref(false)
-    const pilot = ref(true)
+    const identity = ref(false)
+    const payment = ref(false)
+    const eco = ref(false)
+    const safety = ref(false)
+    const geo = ref(false)
+
+    const pilot = ref('')
+    const successful = ref(false)
 
     const projects = ref([
       {
@@ -119,8 +175,9 @@ export default {
         description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
         date: '01.01.2021',
         step: 'Пилот',
-        pilot: true,
-        cityTansport: true
+        pilot: 'passed',
+        successful: false,
+        eco: true
       },
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',
@@ -128,8 +185,9 @@ export default {
         date: '02.01.2021',
         step: 'Пилот',
         thumbnail: '1.png',
-        accelerator: true,
-        newTypes: true
+        COOD: true,
+        geo: true,
+        successful: true
       },
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',
@@ -137,22 +195,28 @@ export default {
         date: '03.01.2021',
         step: 'Пилот',
         thumbnail: '1.png',
-        idea: true,
-        safetyRoad: true
+        MosGorTrans: true,
+        geo: true,
+        pilot: 'no'
       }
     ])
 
     const filteredProjects = computed(() => {
       return projects.value.filter((item) => {
         return (
-          item.cityTansport === cityTansport.value ||
-          item.newTypes === newTypes.value ||
-          item.safetyRoad === safetyRoad.value ||
-          item.healthyStreets === healthyStreets.value ||
-          item.digitalTech === digitalTech.value ||
-          item.idea === idea.value ||
-          item.accelerator === accelerator.value ||
-          item.pilot === pilot.value
+          item.MosMetro === MosMetro.value ||
+          item.MosGorTrans === MosGorTrans.value ||
+          item.CODD === CODD.value ||
+          item.AMPP === AMPP.value ||
+          item.OrgPer === OrgPer.value ||
+          item.MosTransPorj === MosTransPorj.value ||
+          item.identity === identity.value ||
+          item.payment === payment.value ||
+          item.eco === eco.value ||
+          item.safety === safety.value ||
+          item.geo === geo.value ||
+          item.pilot === pilot.value ||
+          (item.successful === successful.value && pilot.value === 'passed')
         )
       })
     })
@@ -171,15 +235,20 @@ export default {
 
     return {
       textToSearch,
-      cityTansport,
-      newTypes,
-      safetyRoad,
-      healthyStreets,
-      digitalTech,
-      idea,
-      accelerator,
+      identity,
+      payment,
+      eco,
+      safety,
+      geo,
+      MosMetro,
+      MosGorTrans,
+      CODD,
+      AMPP,
+      OrgPer,
+      MosTransPorj,
+      searchedProducts,
       pilot,
-      searchedProducts
+      successful
     }
   }
 }
@@ -191,6 +260,7 @@ export default {
     padding: 2rem;
     background: #FFFFFF;
     border-radius: 2rem;
+    margin-top: 24px;
 
     & > .search {
       display: flex;
@@ -218,10 +288,6 @@ export default {
     }
 
     .tags {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
 
       .item {
         display: flex;
@@ -251,13 +317,6 @@ export default {
       align-items: center;
 
       & > .wrapper {
-        flex: 0 0 auto;
-        width: 66.66%;
-        padding-right: 5rem;
-
-         @media (max-width: 991.98px) {
-          width: 100%;
-        }
 
         & > .wrapperDate {
           display: flex;
@@ -284,16 +343,6 @@ export default {
           font-size: 1.25rem;
         }
       }
-
-      & > img {
-        flex: 0 0 auto;
-        width: 33.33%;
-        border-radius: 24px;
-
-        @media (max-width: 991.98px) {
-          width: 100%;
-        }
-      }
     }
   }
 
@@ -308,8 +357,50 @@ export default {
     }
 
   }
-  .surface + .surface {
-    margin-top: 24px;
+
+  .wrapperContent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    & > * {
+      flex: 0 0 auto;
+    }
+
+    & > .filters {
+      width: calc(33.33% - .75rem);
+    }
+
+    & > .cases {
+      width: calc(66.66% - .75rem);
+    }
+  }
+
+  .wrapperTags, .wrapperOrganizations, .wrapperPilot {
+    display: flex;
+    flex-wrap: wrap ;
+    // align-items: center;
+    gap: 1rem;
+  }
+
+  .wrapperPilot {
+    flex-flow: column;
+
+    label {
+      margin-left: 1rem;
+    }
+  }
+
+  .bubble {
+    padding: calc(.75rem - 1px) 1rem .75rem;
+    background: #F5F6F7;
+    border-radius: 12px;
+    color: #333333;
+
+    &.active {
+      background: #333333;
+      color: #F5F6F7;
+    }
   }
 
 }

@@ -18,7 +18,7 @@
         Каталог проектов
       </router-link>
       <router-link to="/suggest" class="card idea">
-        Предложить<br>идею
+        Оставить<br>заявку
       </router-link>
       <a href="https://t.me/SeamMiner" class="card connect">
         Связаться с нами
