@@ -65,17 +65,17 @@
       </div>
       <div class="cases">
         <template v-if="searchedProducts.length">
-      <router-link to="/listing" class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
+      <a href="#" @click="goTo(proj)" class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
         <div class="wrapper">
           <div class="wrapperDate">
-            <div class="date">{{proj.date}}</div>
+            <div class="date">{{ new Date(proj.application_date).toLocaleDateString('ru-ru')}}</div>
           </div>
 
           <h2>{{proj.title}}</h2>
 
           <p>{{proj.description}}</p>
         </div>
-      </router-link>
+      </a>
     </template>
     <template v-else>
       <div class="surface project">
@@ -98,13 +98,17 @@
 
 <script>
 import { ref } from '@vue/reactivity'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import axios from 'axios'
 
-import { computed } from '@vue/runtime-core'
+import { computed, onMounted } from '@vue/runtime-core'
 export default {
 
   setup () {
     const route = useRoute()
+    const router = useRouter()
+    const store = useStore()
 
     const textToSearch = ref(route.query.q || '')
 
@@ -124,54 +128,39 @@ export default {
     const pilot = ref('notMatter')
     const successful = ref(false)
 
-    const projects = ref([
-      {
-        title: 'Titan Power Solution: без проводов к дорожным камерам',
-        description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
-        date: '01.01.2021',
-        step: 'Пилот',
-        pilot: 'passed',
-        successful: false,
-        eco: true
-      },
-      {
-        title: 'Titan Power Solution: без проводов к дорожным камерам',
-        description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
-        date: '02.01.2021',
-        step: 'Пилот',
-        thumbnail: '1.png',
-        COOD: true,
-        geo: true,
-        successful: true
-      },
-      {
-        title: 'Titan Power Solution: без проводов к дорожным камерам',
-        description: 'Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением.',
-        date: '03.01.2021',
-        step: 'Пилот',
-        thumbnail: '1.png',
-        MosGorTrans: true,
-        geo: true,
-        pilot: 'no'
-      }
+    const projects = ref([])
+    const pilots = new Map([
+      ['no', '1'],
+      ['wip', '2'],
+      ['passed', '3']
     ])
+
+    const getInfo = async () => {
+      axios.get('/api/projects/').then(
+        (result) => {
+          result.data.projects.forEach((project) => {
+            projects.value.push(project.fields)
+          })
+        }
+      ).catch(e => alert(e))
+    }
 
     const filteredProjects = computed(() => {
       return projects.value.filter((item) => {
         return (
-          item.MosMetro === MosMetro.value ||
-          item.MosGorTrans === MosGorTrans.value ||
-          item.CODD === CODD.value ||
-          item.AMPP === AMPP.value ||
-          item.OrgPer === OrgPer.value ||
-          item.MosTransPorj === MosTransPorj.value ||
-          item.identity === identity.value ||
-          item.payment === payment.value ||
-          item.eco === eco.value ||
-          item.safety === safety.value ||
-          item.geo === geo.value ||
-          item.pilot === pilot.value ||
-          (item.successful === successful.value && pilot.value === 'passed')
+          (MosMetro.value && item.tags.includes('MosMetro')) ||
+         (MosGorTrans.value && item.tags.includes('MosGorTrans')) ||
+          (CODD.value && item.tags.includes('CODD')) ||
+          (AMPP.value && item.tags.includes('analize')) ||
+          (OrgPer.value && item.tags.includes('OrgPer')) ||
+          (MosTransPorj.value && item.tags.includes('MosTransPorj')) ||
+          (identity.value && item.tags.includes('identification')) ||
+          (payment.value && item.tags.includes('payment')) ||
+          (eco.value && item.tags.includes('eco')) ||
+          (safety.value && item.tags.includes('safety')) ||
+         (geo.value && item.tags.includes('geo')) ||
+          (item.pilot === pilots.get(pilot.value)) ||
+          (item.success_pilot === successful.value && pilot.value === 'passed')
         )
       })
     })
@@ -186,6 +175,15 @@ export default {
       }).sort((a, b) => {
         return new Date(b.date) - new Date(a.date)
       })
+    })
+
+    const goTo = (project) => {
+      store.commit('change', project)
+      router.push('/listing')
+    }
+
+    onMounted(() => {
+      getInfo()
     })
 
     return {
@@ -203,7 +201,8 @@ export default {
       MosTransPorj,
       searchedProducts,
       pilot,
-      successful
+      successful,
+      goTo
     }
   }
 }

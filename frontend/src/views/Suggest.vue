@@ -6,51 +6,97 @@
         <img :src="require('@/assets/FAQ.svg')" alt="Pattern">
       </div>
     </div>
-    <form class="questions">
+    <form @submit.prevent='onSubmit' class="questions">
       <div class="item">
         <h3>Что болит?</h3>
         <p>Опишите своими словами существующую в организации проблему. Можно сформулировать проблему в форму задачи</p>
-        <textarea required name="mainProblem" id="mainProblem" cols="30" rows="10"></textarea>
+        <textarea required name="mainProblem" id="mainProblem" v-model="mainProblem" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>У кого болит?</h3>
         <p>Кто является непосредственно ответственным за проблемный участок?</p>
-        <textarea required name="mainProblemDesc" id="mainProblemDesc" cols="30" rows="10"></textarea>
+        <textarea required name="mainProblemDesc" id="mainProblemDesc" v-model="mainProblemDesc" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Как проявляется ваша проблема?</h3>
         <p>Приведите описание реальной ситуации, в которой проблема бы проявилась</p>
-        <textarea required name="problemAppear" id="problemAppear" cols="30" rows="10"></textarea>
+        <textarea required name="problemAppear" id="problemAppear" v-model="problemAppear" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Какой желательный срок решения проблемы?</h3>
-        <textarea required name="deadlines" id="deadlines" cols="30" rows="10"></textarea>
+        <textarea required name="deadlines" id="deadlines" v-model="deadlines" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Что будет если проблему не решать?</h3>
         <p>Опишите нежелательные эффекты, которые возникают или могут возникнуть из-за того, что проблема не решается</p>
-        <textarea required name="whatIf" id="whatIf" cols="30" rows="10"></textarea>
+        <textarea required name="whatIf" id="whatIf" v-model="whatIf" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Пробовали решать?</h3>
         <p>Как пытались решить проблему ранее? Почему эти попытки оказались неудачными или почему были признаны неудачными? Чем не устроили найденные решения? Общались ли с рынком? Если да, то с кем?</p>
-        <textarea required name="tryBefore" id="tryBefore" cols="30" rows="10"></textarea>
+        <textarea required name="tryBefore" id="tryBefore" v-model="tryBefore" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Почему так происходит?</h3>
         <p>Какие на ваш взгляд ключевые причины возникновения проблемы? Что на ваш взгляд является причиной возникновения проблемы?</p>
-        <textarea required name="whyItGoes" id="whatIf" cols="30" rows="10"></textarea>
+        <textarea required name="whyItGoes" id="whyItGoes" v-model="whyItGoes" cols="30" rows="10"></textarea>
       </div>
       <div class="item">
         <h3>Как с вами связаться?</h3>
         <p>Укажите наименование вашего предприятия, ваши ФИО, и телефон для связи.</p>
-        <textarea required name="contact" id="contact" cols="30" rows="10"></textarea>
+        <textarea required name="contact" id="contact" v-model="contact" cols="30" rows="10"></textarea>
       </div>
 
       <button type="submit">Отправить</button>
     </form>
   </div>
 </template>
+
+<script>
+import { ref } from '@vue/reactivity'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+
+export default {
+  setup () {
+    const mainProblem = ref('')
+    const mainProblemDesc = ref('')
+    const problemAppear = ref('')
+    const deadlines = ref('')
+    const whatIf = ref('')
+    const tryBefore = ref('')
+    const whyItGoes = ref('')
+    const contact = ref('')
+    const router = useRouter()
+
+    const onSubmit = () => {
+      axios.post('/api/custom_request/', {
+        pain: mainProblem.value,
+        problem: mainProblemDesc.value,
+        what_if: whatIf.value,
+        whose_pain: problemAppear.value,
+        period: deadlines.value,
+        tried: tryBefore.value,
+        contacs: contact.value
+      })
+
+      router.back()
+    }
+
+    return {
+      mainProblem,
+      mainProblemDesc,
+      problemAppear,
+      deadlines,
+      whatIf,
+      tryBefore,
+      whyItGoes,
+      contact,
+      onSubmit
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .suggest {

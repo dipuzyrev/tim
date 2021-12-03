@@ -3,38 +3,38 @@
     <div class="wrapperMainInfo">
       <div class="wrapper">
         <div class="wrapperDate">
-          <div class="date">01.01.2021</div>
+          <div class="date">{{new Date(project.application_date).toLocaleDateString('ru-ru')}}</div>
         </div>
 
-        <h2>Titan Power Solution: без проводов к дорожным камерам</h2>
+        <h2>{{ project.title }}</h2>
 
-        <p>Суперконденсаторный источник бесперебойного питания (ИБП) — решение для обеспечения безотказной работы автоматизированных систем управления дорожным движением</p>
+        <p>{{ project.description }}</p>
       </div>
-      <img :src="require(`@/assets/notFound.svg`)">
+      <img :src="require(`@/assets/${project.thumbnail}`)">
     </div>
     <div class="wrapperInfo">
       <div class="wrapperTitle">
-        <div class="date">11.09.2001</div>
+        <div class="date">{{new Date(project.application_date).toLocaleDateString('ru-ru')}}</div>
         <h2>Заявление</h2>
       </div>
 
       <div class="wrapperShortInfo">
         <div class="item">
           <h3>Стадия готовности продукта</h3>
-          <p>Продукт</p>
+          <p>{{ project.product_stage }}</p>
         </div>
         <div class="item">
           <h3>Cертификация продукта</h3>
-          <p>Требуется</p>
+          <p>{{ project.requires_cert }}</p>
         </div>
         <div class="item">
           <h3>Размер команды</h3>
-          <p>20 человек</p>
+          <p>{{ project.team_size }}</p>
         </div>
         <div class="item">
           <h3>Организация Московского транспорта</h3>
           <p>
-            ЦОДД
+            {{ project.prior_organization }}
           </p>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="item">
           <h3>Организация Московского транспорта</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laborum molestias, iusto fugit eos suscipit quos asperiores pariatur fuga reprehenderit explicabo rerum magni consequuntur? Eius a molestiae, aperiam totam omnis voluptatum!
+            {{project.use_cases}}
           </p>
         </div>
         <div class="item">
@@ -56,7 +56,7 @@
       </div>
 
       <div class="wrapperPresentation">
-        <a href="#" class="link idea">Сcылка на презентацию</a>
+        <a :href="project.presentation_link" class="link idea">Сcылка на презентацию</a>
       </div>
 
       <!-- <div class="wrapperAcceleration">
@@ -146,11 +146,12 @@
 
 <script>
 import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex'
 export default {
   setup () {
-    const project = ref({
+    const store = useStore()
 
-    })
+    const project = ref(store.state.project)
 
     return {
       project
