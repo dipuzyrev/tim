@@ -166,7 +166,7 @@ export default {
     const safety = ref(false)
     const geo = ref(false)
 
-    const pilot = ref('')
+    const pilot = ref('notMatter')
     const successful = ref(false)
 
     const projects = ref([
@@ -264,6 +264,7 @@ export default {
 
     & > .search {
       display: flex;
+      align-items: center;
       gap: 1rem;
       margin-bottom: 2rem;
 
@@ -276,7 +277,7 @@ export default {
         background: #FFFFFF;
         border: none;
         font-family: 'Moscow Sans', sans-serif;
-        font-size: 1.5rem;
+        font-size: 2.375rem;
         color: #000;
         width: 100%;
 
@@ -396,6 +397,10 @@ export default {
     background: #F5F6F7;
     border-radius: 12px;
     color: #333333;
+
+    &:hover {
+      cursor: pointer
+    }
 
     &.active {
       background: #333333;
