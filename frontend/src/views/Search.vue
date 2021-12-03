@@ -133,7 +133,6 @@
 
           <p>По вашему запросу ничего не найдено. <router-link class="lnk" to="/suggest">Предложите идею</router-link> или <a href="https://t.me/SeamMiner" class="lnk">свяжитесь с нами.</a></p>
         </div>
-        <img :src="require(`@/assets/notFound.svg`)"> 
       </div>
     </template>
       </div>
