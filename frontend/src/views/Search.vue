@@ -7,48 +7,6 @@
       </div>
 
       <div class="tags">
-        <!-- <div class="tags">
-          <DropDown title="Технологическое направление">
-            <div class="item">
-              <input type="checkbox" name="cityTansport" id="cityTansport" v-model="cityTansport" style="width: 37px">
-              <label for="cityTansport">Доступный и комфортный городской транспорт</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="newTypes" v-model="newTypes" id="newTypes">
-              <label for="newTypes">Новые виды мобильности</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="safetyRoad" v-model="safetyRoad" id="safetyRoad">
-              <label for="safetyRoad">Безопасность дорожного движения</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="healthyStreets" v-model="healthyStreets" id="healthyStreets">
-              <label for="healthyStreets">Здоровые улицы и экология</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="digitalTech" id="digitalTech" v-model="digitalTech" style="width: 28px">
-              <label for="digitalTech">Цифровые технологии в&nbsp;транспорте</label>
-            </div>
-
-          </DropDown>
-          <DropDown title="Стадия проекта">
-            <div class="item">
-              <input type="checkbox" name="Idea" v-model="idea" id="idea">
-              <label for="idea">Идея</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="Accelerator" v-model="accelerator" id="accelerator">
-              <label for="accelerator">Аккселератор</label>
-            </div>
-            <div class="item">
-              <input type="checkbox" name="Pilot" v-model="pilot" id="pilot">
-              <label for="pilot">Пилот</label>
-            </div>
-
-          </DropDown>
-        </div>
-          -->
-
         <span>Найдено результатов: {{ searchedProducts.length }}</span>
       </div>
 
@@ -107,20 +65,17 @@
       </div>
       <div class="cases">
         <template v-if="searchedProducts.length">
-      <div class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
+      <router-link to="/listing" class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
         <div class="wrapper">
           <div class="wrapperDate">
             <div class="date">{{proj.date}}</div>
-            <ul>
-              <li class="step">{{proj.step}}</li>
-            </ul>
           </div>
 
           <h2>{{proj.title}}</h2>
 
           <p>{{proj.description}}</p>
         </div>
-      </div>
+      </router-link>
     </template>
     <template v-else>
       <div class="surface project">
@@ -316,6 +271,12 @@ export default {
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      color: #000000;
+      text-decoration: none;
+
+      :hover {
+        cursor: pointer;
+      }
 
       & > .wrapper {
 
