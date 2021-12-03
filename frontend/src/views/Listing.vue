@@ -146,12 +146,32 @@
 
 <script>
 import { ref } from '@vue/reactivity'
-import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
+
 export default {
   setup () {
-    const store = useStore()
+    const project = ref({})
+    const route = useRoute()
 
-    const project = ref(store.state.project)
+    const getInfo = async () => {
+      axios.get(
+        'http://localhost:8000/api/project/',
+        {
+          headers: {
+            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+          },
+          data: {
+            id: route.params.id
+          }
+        }).then(
+        (result) => {
+          project.value = result.data
+        }
+      ).catch(e => alert(e))
+    }
 
     return {
       project
