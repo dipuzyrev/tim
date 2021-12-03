@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-1tzgcp+lcyc_$kjz_z@(wrz^6%@3^+!dkmgkhpk24en=%m1c^n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '5.53.125.96']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.106.3.42']
 
 
 # Application definition
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -152,10 +153,10 @@ REST_FRAMEWORK = {
 # JWT CONFIG
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
     # 'SIGNING_KEY': '^2rWF]r^L#Su$&Fl@oo)',
-    # 'AUTH_HEADER_TYPES': ('Bearer'),
+    'AUTH_HEADER_TYPES': ('Bearer'),
 }
 
 
@@ -167,6 +168,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Allowed origins to perform requests to this API
 CORS_ALLOWED_ORIGINS = [
     'http://localhost',
-    # 'http://customip',
+    'http://localhost:8080',
+    'http://10.106.3.42:8000',
     # 'https://customip',
 ]

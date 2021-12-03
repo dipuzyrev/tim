@@ -136,10 +136,18 @@ export default {
     ])
 
     const getInfo = async () => {
-      axios.get('/api/projects/').then(
+      axios.get(
+        'http://localhost:8000/api/projects/',
+        {
+          headers: {
+            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+          }
+        }).then(
         (result) => {
           result.data.projects.forEach((project) => {
-            projects.value.push(project.fields)
+            projects.value.push({id: project.pk, ...project.fields})
           })
         }
       ).catch(e => alert(e))

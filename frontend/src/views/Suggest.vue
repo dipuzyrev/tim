@@ -70,15 +70,24 @@ export default {
     const router = useRouter()
 
     const onSubmit = () => {
-      axios.post('/api/custom_request/', {
-        pain: mainProblem.value,
-        problem: mainProblemDesc.value,
-        what_if: whatIf.value,
-        whose_pain: problemAppear.value,
-        period: deadlines.value,
-        tried: tryBefore.value,
-        contacs: contact.value
-      })
+      axios.post(
+        'http://localhost:8000/api/custom_request/',
+        {
+          headers: {
+            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+          },
+          data: {
+            pain: mainProblem.value,
+            problem: mainProblemDesc.value,
+            what_if: whatIf.value,
+            whose_pain: problemAppear.value,
+            period: deadlines.value,
+            tried: tryBefore.value,
+            contacs: contact.value
+          }
+        })
 
       router.back()
     }
