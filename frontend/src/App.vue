@@ -6,7 +6,6 @@
       </router-link>
       <div class="links">
         <router-link class="link" to="/search">Каталог проектов</router-link>
-        <a href="#" @click="alert('Вы авторизированы успешно')" class="link">Войти</a>
         <router-link class="link idea" to="/suggest">Предложить идею</router-link>
       </div>
     </div>

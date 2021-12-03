@@ -76,7 +76,7 @@
     & > .backgroundImage {
       display: flex;
       overflow: visible;
-      width: 150px;
+      width: 280px;
     }
   }
 
