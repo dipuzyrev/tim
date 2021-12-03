@@ -15,17 +15,22 @@ const routes = [
   {
     path: '/success',
     name: 'Success',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Success.vue')
+    component: () => import(/* webpackChunkName: "success" */ '../views/Success.vue')
   },
   {
     path: '/faq',
     name: 'FAQ',
-    component: () => import(/* webpackChunkName: "about" */ '../views/FAQ.vue')
+    component: () => import(/* webpackChunkName: "FAQ" */ '../views/FAQ.vue')
   },
   {
     path: '/suggest',
     name: 'Suggest',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Suggest.vue')
+    component: () => import(/* webpackChunkName: "suggest" */ '../views/Suggest.vue')
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue')
   }
 ]
 
