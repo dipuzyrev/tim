@@ -3,7 +3,7 @@
     <div class="surface">
       <div class="search">
         <img :src="require('@/assets/Search.png')" alt="Search">
-        <input v-model="textToSearch" type="text">
+        <input v-model="textToSearch" type="text" placeholder="Метро">
         <!-- TODO: добавить algolia поиск короче -->
       </div>
 
@@ -48,7 +48,7 @@
 
           </DropDown>
         </div>
-        <span>Найдено {{ searchedProducts.length }} продуктов</span>
+        <span>Найдено результатов: {{ searchedProducts.length }}</span>
       </div>
 
     </div>
@@ -120,7 +120,8 @@ export default {
         date: '01.01.2021',
         step: 'Пилот',
         pilot: true,
-        cityTansport: true
+        cityTansport: true,
+        thumbnail: '1.png'
       },
       {
         title: 'Titan Power Solution: без проводов к дорожным камерам',

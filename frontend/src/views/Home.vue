@@ -4,7 +4,7 @@
       <div class="title">
         <h1>Транспортные инновации Москвы</h1>
         <form @submit.prevent='onSubmit(query)'>
-          <input type="text" v-model="query" id="search">
+          <input type="text" v-model="query" id="search" placeholder="Метро">
           <img :src="require('@/assets/Search.png')" alt="Search">
         </form>
       </div>
