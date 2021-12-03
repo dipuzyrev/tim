@@ -9,10 +9,37 @@ import json
 from .models import *
 
 
+class GetProjectAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        project = Project.objects.filter(id=request.data.get('id')).first()
+        if not project:
+            raise NotFound('Project not found')
+
+        response = {
+            'title': project.title,
+            'description': project.description,
+            'application_date': project.application_date,
+            'pilot': project.pilot,
+            'success_pilot': project.success_pilot,
+            'tags': project.tags,
+            'thumbnail': project.thumbnail,
+            'product_stage': project.product_stage,
+            'requires_cert': project.requires_cert,
+            'team_size': project.team_size,
+            'prior_organization': project.prior_organization,
+            'use_cases': project.use_cases,
+            'presentation_link': project.presentation_link,
+        }
+        return Response(response, status=status.HTTP_200_OK)
+
+
 class FetchProjectsAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        
         projects = serializers.serialize('json', Project.objects.all())
 
         response = {
