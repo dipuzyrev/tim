@@ -52,22 +52,38 @@
       </div>
 
     </div>
-    <div class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
-      <div class="wrapper">
-        <div class="wrapperDate">
-          <div class="date">{{proj.date}}</div>
-          <ul>
-            <li class="step">{{proj.step}}</li>
-          </ul>
+    <template v-if="searchedProducts.length">
+      <div class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
+        <div class="wrapper">
+          <div class="wrapperDate">
+            <div class="date">{{proj.date}}</div>
+            <ul>
+              <li class="step">{{proj.step}}</li>
+            </ul>
+          </div>
+
+          <h2>{{proj.title}}</h2>
+
+          <p>{{proj.description}}</p>
         </div>
-
-        <h2>{{proj.title}}</h2>
-
-        <p>{{proj.description}}</p>
+        <img v-if="proj.thumbnail" :src="require(`@/assets/${proj.thumbnail}`)" :alt="proj.title">
+        <img v-else :src="require(`@/assets/notFound.svg`)">
       </div>
-      <img v-if="proj.thumbnail" :src="require(`@/assets/${proj.thumbnail}`)" :alt="proj.title">
-      <img v-else :src="require(`@/assets/notFound.svg`)">
-    </div>
+    </template>
+    <template v-else>
+      <div class="surface project">
+        <div class="wrapper">
+          <div class="wrapperDate">
+            <div class="step">Проблема</div>
+          </div>
+
+          <h2>Не нашли, <br> что искали?</h2>
+
+          <p>По вашему запросу ничего не найдено. <router-link class="lnk" to="/suggest">Предложите идею</router-link> или <a href="https://t.me/SeamMiner" class="lnk">свяжитесь с нами.</a></p>
+        </div>
+        <img :src="require(`@/assets/notFound.svg`)">
+      </div>
+    </template>
   </div>
 </template>
 
@@ -85,7 +101,7 @@ export default {
   setup () {
     const route = useRoute()
 
-    const textToSearch = ref(route.query.q)
+    const textToSearch = ref(route.query.q || '')
 
     const cityTansport = ref(false)
     const newTypes = ref(false)
@@ -140,21 +156,6 @@ export default {
         )
       })
     })
-
-    // watchEffect(() => {
-    //   filteredProjects.value = projects.value.filter((item) => {
-    //     return (
-    //       !!item.cityTansport === cityTansport.value ||
-    //       !!item.newTypes === newTypes.value ||
-    //       !!item.safetyRoad === safetyRoad.value ||
-    //       !!item.healthyStreets === healthyStreets.value ||
-    //       !!item.digitalTech === digitalTech.value ||
-    //       !!item.idea === idea.value ||
-    //       !!item.accelerator === accelerator.value ||
-    //       !!item.pilot === pilot.value
-    //     )
-    //   })
-    // })
 
     const searchedProducts = computed(() => {
       return filteredProjects.value.filter((projects) => {
@@ -296,6 +297,17 @@ export default {
     }
   }
 
+  .lnk {
+    font-size: 1.25rem;
+    color: #DD443F;
+    border-bottom: 1px solid #EAB9B7;
+    text-decoration: none;
+
+    &:hover {
+      color: #DD443F80;
+    }
+
+  }
   .surface + .surface {
     margin-top: 24px;
   }
