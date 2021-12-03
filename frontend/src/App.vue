@@ -5,8 +5,7 @@
         <img class="logo" :src="require('@/assets/Logo.svg')" alt="Logo">
       </router-link>
       <div class="links">
-        <router-link class="link" to="/success">История успеха</router-link>
-        <router-link class="link" to="/faq">FAQ</router-link>
+        <router-link class="link" to="/search">Каталог проектов</router-link>
         <router-link class="link idea" to="/suggest">Предложить идею</router-link>
       </div>
     </div>
