@@ -3,7 +3,7 @@
     <div class="surface">
       <div class="search">
         <img :src="require('@/assets/Search.png')" alt="Search">
-        <input v-model="textToSearch" type="text">
+        <input v-model="textToSearch" type="text" placeholder="Метро">
         <!-- TODO: добавить algolia поиск короче -->
       </div>
 
@@ -47,8 +47,8 @@
             </div>
 
           </DropDown>
-        </div> -->
-        <span>Найдено {{ searchedProducts.length }} продуктов</span>
+        </div>
+        <span>Найдено результатов: {{ searchedProducts.length }}</span>
       </div>
 
     </div>
@@ -132,7 +132,7 @@
 
           <p>По вашему запросу ничего не найдено. <router-link class="lnk" to="/suggest">Предложите идею</router-link> или <a href="https://t.me/SeamMiner" class="lnk">свяжитесь с нами.</a></p>
         </div>
-        <!-- <img :src="require(`@/assets/notFound.svg`)"> -->
+        <img :src="require(`@/assets/notFound.svg`)"> -->
       </div>
     </template>
       </div>
