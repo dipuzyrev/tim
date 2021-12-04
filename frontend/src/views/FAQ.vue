@@ -56,20 +56,14 @@ export default {
     font-size: 4.875rem;
   }
 
-  & > * {
-    flex: 1 0 0%;
-  }
-
   .wrapperTitle {
     display: flex;
-    flex-flow: column;
     justify-items: space-between;
     gap: 5rem;
 
     & > .backgroundImage {
       display: flex;
-      justify-content: center;
-      width: 100px;
+      width: 280px;
       overflow: visible;
     }
   }

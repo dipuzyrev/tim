@@ -20,9 +20,9 @@
       <router-link to="/suggest" class="card idea">
         Оставить запрос<br>на разработку <br> решения
       </router-link>
-      <a href="https://t.me/SeamMiner" class="card connect">
-        Связаться с нами
-      </a>
+      <router-link to="/faq" class="card connect">
+        Часто<br>задаваемые<br>вопросы
+      </router-link>
     </div>
 
   </div>
@@ -137,7 +137,7 @@ export default {
       }
 
       &.connect {
-        background: url('../assets/Connect.png');
+        background: url('../assets/faq.png');
         background-size: 100% 100%;
       }
     }

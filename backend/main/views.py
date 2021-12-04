@@ -12,7 +12,7 @@ from .models import *
 class GetProjectAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def post(self, request):
         project = Project.objects.filter(id=request.data.get('id')).first()
         if not project:
             raise NotFound('Project not found')

@@ -10,7 +10,7 @@
 
         <p>{{ project.description }}</p>
       </div>
-      <img :src="require(`@/assets/${project.thumbnail}`)">
+      <img v-if="project.thumbnail" :src="require(`@/assets/${project.thumbnail}`)">
     </div>
     <div class="wrapperInfo">
       <div class="wrapperTitle">
@@ -25,7 +25,7 @@
         </div>
         <div class="item">
           <h3>Cертификация продукта</h3>
-          <p>{{ project.requires_cert }}</p>
+          <p>{{ project.requires_cert ? 'Да' : 'Нет' }}</p>
         </div>
         <div class="item">
           <h3>Размер команды</h3>
@@ -57,6 +57,10 @@
 
       <div class="wrapperPresentation">
         <a :href="project.presentation_link" class="link idea">Сcылка на презентацию</a>
+      </div>
+
+      <div class="wrapperButton">
+        <button @click="addFavourite">Добавить</button>
       </div>
 
       <!-- <div class="wrapperAcceleration">
@@ -156,22 +160,72 @@ export default {
     const route = useRoute()
 
     const getInfo = async () => {
-      axios.get(
-        'http://localhost:8000/api/project/',
-        {
-          headers: {
-            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json'
-          },
-          data: {
-            id: route.params.id
-          }
-        }).then(
-        (result) => {
-          project.value = result.data
-        }
-      ).catch(e => alert(e))
+      var data = JSON.stringify({
+        "id": route.params.id
+      });
+
+      var config = {
+        method: 'post',
+        url: 'http://localhost:8000/api/project/',
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        // console.log(response)
+        project.value = response.data
+        // console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+      // axios.post(
+      //   'http://localhost:8000/api/project/',
+      //   {
+      //     headers: {
+      //       Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+      //       'X-Requested-With': 'XMLHttpRequest',
+      //       'Content-Type': 'application/json'
+      //     },
+      //     data: {
+      //       id: route.params.id
+      //     }
+      //   }).then(
+      //   (result) => {
+      //     project.value = result.data
+      //   }
+      // ).catch(e => alert(e))
+    }
+
+    const addFavourite = () => {
+      var data = JSON.stringify({
+        "id": route.params.id
+      });
+
+      var config = {
+        method: 'post',
+        url: 'http://localhost:8000/api/select_project/',
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM4NjI4MjU1LCJpYXQiOjE2Mzg1NDE4NTUsImp0aSI6ImQ5ODk3ZDhhZDdlODQ3YTk4Nzc3MzFhZWExMTQ1NmY5IiwidXNlcl9pZCI6MX0.di0krwE7io1MX1jqJCv_e-GtVuVoNs4IbHIs-uoaILE',
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        alert('Вы успешно добавили проект в избранное')
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     }
 
     onMounted(() => {
@@ -179,7 +233,8 @@ export default {
     })
 
     return {
-      project
+      project,
+      addFavourite
     }
   }
 }
@@ -206,8 +261,25 @@ export default {
     flex-flow: wrap row;
     justify-content: space-between;
     align-items: center;
-    gap: 124px;
     margin-top: 4rem;
+
+    & > .wrapper {
+      flex: 0 0 auto;
+        width: 66.66%;
+        padding-right: 5rem;
+         @media (max-width: 991.98px) {
+          width: 100%;
+        }
+    }
+
+    & > img {
+      flex: 0 0 auto;
+        width: 33.33%;
+        border-radius: 24px;
+        @media (max-width: 991.98px) {
+          width: 100%;
+        }
+    }
   }
 
   .wrapper {
@@ -274,5 +346,23 @@ export default {
       }
     }
   }
+
+  button {
+      background: #DA3832;
+      border: 1px solid #EBEBEB;
+      box-sizing: border-box;
+      border-radius: 4px;
+      padding: 12px 80px;
+      color: #FFFFFF;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .wrapperButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 4rem;
+    }
 }
 </style>

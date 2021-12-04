@@ -1,7 +1,7 @@
 <template>
   <div class="suggest">
     <div class="wrapperTitle">
-      <h1>Оставить запрос на разработку решения</h1>
+      <h1 style="min-width: 748px;">Оставить заявку<br>на поиск решения</h1>
       <div class="backgroundImage">
         <img :src="require('@/assets/FAQ.svg')" alt="Pattern">
       </div>
@@ -70,25 +70,53 @@ export default {
     const router = useRouter()
 
     const onSubmit = () => {
-      axios.post(
-        'http://localhost:8000/api/custom_request/',
-        {
-          headers: {
-            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json'
-          },
-          data: {
-            pain: mainProblem.value,
-            problem: mainProblemDesc.value,
-            what_if: whatIf.value,
-            whose_pain: problemAppear.value,
-            period: deadlines.value,
-            tried: tryBefore.value,
-            contacs: contact.value
-          }
-        })
+      var data = JSON.stringify({
+        pain: mainProblem.value,
+        problem: mainProblemDesc.value,
+        what_if: whatIf.value,
+        whose_pain: problemAppear.value,
+        period: deadlines.value,
+        tried: tryBefore.value,
+        contacs: contact.value
+      });
 
+      var config = {
+        method: 'post',
+        url: 'http://localhost:8000/api/custom_request/',
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM4NjI4MjU1LCJpYXQiOjE2Mzg1NDE4NTUsImp0aSI6ImQ5ODk3ZDhhZDdlODQ3YTk4Nzc3MzFhZWExMTQ1NmY5IiwidXNlcl9pZCI6MX0.di0krwE7io1MX1jqJCv_e-GtVuVoNs4IbHIs-uoaILE',
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      // axios.post(
+      //   'http://localhost:8000/api/custom_request/',
+      //   {
+      //     headers: {
+      //       Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMDk4Mzc0LCJpYXQiOjE2Mzg1NjIzNzQsImp0aSI6Ijg3NWE3Mzg2YzVmZDQ0NDc4NmMzMWZkNTNlYmI3MWU5IiwidXNlcl9pZCI6Mn0.4C2y9_K7UPNf2J_AVvNzdX9Gv8-R3xUzraR0Se5tTdY',
+      //       'Content-Type': 'application/json'
+      //     },
+      //     data: {
+      //       pain: mainProblem.value,
+      //       problem: mainProblemDesc.value,
+      //       what_if: whatIf.value,
+      //       whose_pain: problemAppear.value,
+      //       period: deadlines.value,
+      //       tried: tryBefore.value,
+      //       contacs: contact.value
+      //     }
+      //   })
+
+      alert('Спасибо, заявка успешно отправлена!')
       router.back()
     }
 

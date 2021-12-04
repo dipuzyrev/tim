@@ -65,7 +65,7 @@
       </div>
       <div class="cases">
         <template v-if="searchedProducts.length">
-      <a href="#" @click="goTo(proj)" class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
+      <a href="#" @click.prevent="goTo(proj)" class="surface project" v-for="(proj, index) in searchedProducts" :key="index">
         <div class="wrapper">
           <div class="wrapperDate">
             <div class="date">{{ new Date(proj.application_date).toLocaleDateString('ru-ru')}}</div>
@@ -99,7 +99,6 @@
 <script>
 import { ref } from '@vue/reactivity'
 import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 import axios from 'axios'
 
 import { computed, onMounted } from '@vue/runtime-core'
@@ -108,7 +107,6 @@ export default {
   setup () {
     const route = useRoute()
     const router = useRouter()
-    const store = useStore()
 
     const textToSearch = ref(route.query.q || '')
 
@@ -147,30 +145,44 @@ export default {
         }).then(
         (result) => {
           result.data.projects.forEach((project) => {
-            projects.value.push({id: project.pk, ...project.fields})
+            projects.value.push({ id: project.pk, ...project.fields })
           })
         }
       ).catch(e => alert(e))
     }
 
     const filteredProjects = computed(() => {
-      return projects.value.filter((item) => {
+      let filtered = projects.value.filter((item) => {
         return (
-          (MosMetro.value && item.tags.includes('MosMetro')) ||
-         (MosGorTrans.value && item.tags.includes('MosGorTrans')) ||
-          (CODD.value && item.tags.includes('CODD')) ||
-          (AMPP.value && item.tags.includes('analize')) ||
-          (OrgPer.value && item.tags.includes('OrgPer')) ||
-          (MosTransPorj.value && item.tags.includes('MosTransPorj')) ||
+          (!MosMetro.value && !MosGorTrans.value && !CODD.value && !AMPP.value && !OrgPer.value && !MosTransPorj.value)
+          ||
+          (MosMetro.value && item.prior_organization === '1') ||
+          (MosGorTrans.value && item.prior_organization === '2') ||
+          (CODD.value && item.prior_organization === '3') ||
+          (OrgPer.value && item.prior_organization === '4') ||
+          (MosTransPorj.value && item.prior_organization === '5') ||
+          (AMPP.value && item.prior_organization === '6')
+        )})
+
+      filtered = filtered.filter((item) => {
+        return (
+          (!identity.value && !payment.value && !eco.value && !safety.value && !geo.value))
+          ||
           (identity.value && item.tags.includes('identification')) ||
           (payment.value && item.tags.includes('payment')) ||
           (eco.value && item.tags.includes('eco')) ||
           (safety.value && item.tags.includes('safety')) ||
-         (geo.value && item.tags.includes('geo')) ||
-          (item.pilot === pilots.get(pilot.value)) ||
-          (item.success_pilot === successful.value && pilot.value === 'passed')
-        )
-      })
+          (geo.value && item.tags.includes('geo')
+        )})
+
+      filtered = filtered.filter((item) => {
+        return (
+          (pilot.value === 'notMatter') ||
+          ((item.pilot === pilots.get(pilot.value)) &&
+          (!successful.value || item.success_pilot === true))
+        )})
+
+      return filtered
     })
 
     const searchedProducts = computed(() => {
@@ -186,8 +198,7 @@ export default {
     })
 
     const goTo = (project) => {
-      store.commit('change', project)
-      router.push('/listing')
+      router.push(`/listing/${project.id}`)
     }
 
     onMounted(() => {
