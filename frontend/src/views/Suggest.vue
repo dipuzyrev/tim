@@ -1,7 +1,7 @@
 <template>
   <div class="suggest">
     <div class="wrapperTitle">
-      <h1 style="min-width: 748px;">Оставить заявку<br>на поиск решения</h1>
+      <h1 style="min-width: 748px;">Оставить запрос<br>на поиск решения</h1>
       <div class="backgroundImage">
         <img :src="require('@/assets/FAQ.svg')" alt="Pattern">
       </div>

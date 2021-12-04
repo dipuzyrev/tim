@@ -18,7 +18,7 @@
         Каталог проектов
       </router-link>
       <router-link to="/suggest" class="card idea">
-        Оставить запрос<br>на разработку <br> решения
+        Запрос на поиск решения
       </router-link>
       <router-link to="/faq" class="card connect">
         Часто<br>задаваемые<br>вопросы

@@ -17,7 +17,7 @@
 
 ## Демо
 
-[Ссылка на видео](https://drive.google.com/file/d/10P6NNwDzoKURMXErRI2TXJlVMSH_5W6T/view?usp=sharing)
+[Ссылка на видео](https://drive.google.com/file/d/1VzpKUVerp2Ma0_YV0ditff-3aoB2_7uh/view?usp=sharing)
 
 ![Demo](demo.png)
 
